@@ -34,7 +34,8 @@ const getRouteManifest = (additionalRoutes = []) => {
         } catch (e) {
             serverRoutes = Object.keys(__non_webpack_require__(path.join(__dirname, '../pages-manifest.json')))
         }
-        knownRoutes = Array.from(new Set([...serverRoutes, ...additionalRoutes]))
+
+        knownRoutes = Array.from(new Set([serverRoutes].concat(additionalRoutes)))
     }
 
     return knownRoutes
