@@ -1,6 +1,8 @@
 # next-known-route
 Check if a url is a known route to a next.js application ahead of time.
 
+https://www.npmjs.com/package/next-known-route
+
 # Use Case
 Why do you need this? Next does not offer a way to know if a url matches a known route with the application.
 The only way to do it out the box is to try and preload the route, which is wasteful & only works on the client. 
