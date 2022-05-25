@@ -3,7 +3,11 @@ import {getRouteRegex, getRouteMatcher} from 'next/dist/shared/lib/router/utils'
 
 let knownRoutes = [];
 if(typeof window !== "undefined") {
-    knownRoutes = window.__NEXT_DATA__.props.knownRoutes || window.__NEXT_DATA__.props.layoutProps.knownRoutes;
+    try {
+        knownRoutes = window.__NEXT_DATA__.props.knownRoutes || window.__NEXT_DATA__.props.layoutProps.knownRoutes;
+    } catch(e) {
+
+    }
     NextRouter.ready(function() {
         try {
             NextRouter.router.pageLoader.getPageList().then(function (pageList) {
