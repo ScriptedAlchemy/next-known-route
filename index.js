@@ -36,11 +36,12 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
         });
     } else {
         const path = require('path')
+        let requireFunc = __non_webpack_require__ || require
         let serverRoutes
         try {
-            serverRoutes = Object.keys(__non_webpack_require__(path.join(__dirname, 'pages-manifest.json')))
+            serverRoutes = Object.keys(requireFunc(path.join(__dirname, 'pages-manifest.json')))
         } catch (e) {
-            serverRoutes = Object.keys(__non_webpack_require__(path.join(__dirname, '../pages-manifest.json')))
+            serverRoutes = Object.keys(requireFunc(path.join(__dirname, '../pages-manifest.json')))
         }
         knownRoutes = Array.from(new Set([].concat(serverRoutes, additionalRoutes)));
     }
