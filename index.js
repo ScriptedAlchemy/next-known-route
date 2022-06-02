@@ -1,5 +1,5 @@
-import NextRouter from "next/router";
-import {getRouteRegex, getRouteMatcher} from 'next/dist/shared/lib/router/utils'
+const NextRouter = require("next/router");
+const {getRouteRegex, getRouteMatcher} = require('next/dist/shared/lib/router/utils')
 
 let knownRoutes = [];
 if(typeof window !== "undefined") {
@@ -27,7 +27,7 @@ if(typeof window !== "undefined") {
  * @param additionalRoutes {array} - accepts an array of any additional routes
  * @returns {*[]}
  */
-export const getRouteManifest = function getRouteManifest(additionalRoutes = []) {
+module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = []) {
     if(typeof window !== "undefined") {
         additionalRoutes.forEach(function (page) {
             if (!knownRoutes.includes(page)) {
@@ -52,7 +52,7 @@ export const getRouteManifest = function getRouteManifest(additionalRoutes = [])
  * @param url
  * @returns {boolean}
  */
-export const isKnownRoute = function isKnownRoute(url) {
+module.exports.isKnownRoute = function isKnownRoute(url) {
     return knownRoutes.some(function (routeExp) {
         var routeRegex = getRouteRegex(routeExp);
         var routeMatcher = getRouteMatcher(routeRegex);
