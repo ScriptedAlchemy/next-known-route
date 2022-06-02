@@ -35,6 +35,7 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
         });
     } else {
         const path = require("path");
+        const fs = require('fs');
         let requireFunc;
         if (typeof __non_webpack_require__ === "undefined") {
             requireFunc = require;
