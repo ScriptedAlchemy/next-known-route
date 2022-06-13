@@ -33,7 +33,7 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
                 knownRoutes.push(page);
             }
         });
-    } else {
+    } else if(!process.browser) {
         const path = require("path");
         const fs = require('fs');
         let requireFunc;
@@ -49,13 +49,15 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
             pageManifest = path.join(__dirname, "pages-manifest.json");
         } else if (fs.existsSync(path.join(__dirname, "../pages-manifest.json"))) {
             pageManifest = path.join(__dirname, "../pages-manifest.json");
-        } else if (fs.existsSync(path.join(process.cwd(), ".next", "pages-manifest.json"))) {
-            pageManifest = path.join(process.cwd(), ".next", "pages-manifest.json");
+        } else if (fs.existsSync(path.join(process.cwd(), ".next/server", "pages-manifest.json"))) {
+            pageManifest = path.join(process.cwd(), ".next/server", "pages-manifest.json");
         }
-        try {
-            serverRoutes = Object.keys(requireFunc(pageManifest));
-        } catch (e) {
-            console.error(e);
+        if(pageManifest) {
+            try {
+                serverRoutes = Object.keys(requireFunc(pageManifest));
+            } catch (e) {
+                console.error(e);
+            }
         }
         knownRoutes = Array.from(new Set([].concat(serverRoutes, additionalRoutes)));
     }
