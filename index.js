@@ -7,19 +7,22 @@ if (typeof window !== "undefined") {
     } catch (e) {
 
     }
-    NextRouter.ready(function() {
-        try {
-            NextRouter.router.pageLoader.getPageList().then(function(pageList) {
-                pageList.forEach(function(page) {
-                    if (!knownRoutes.includes(page)) {
-                        knownRoutes.push(page);
-                    }
+    if (NextRouter.ready) {
+
+        NextRouter.ready(function () {
+            try {
+                NextRouter.router.pageLoader.getPageList().then(function (pageList) {
+                    pageList.forEach(function (page) {
+                        if (!knownRoutes.includes(page)) {
+                            knownRoutes.push(page);
+                        }
+                    });
                 });
-            });
-        } catch (e) {
-            console.error(e);
-        }
-    });
+            } catch (e) {
+                console.error(e);
+            }
+        });
+    }
 }
 /**
  *
