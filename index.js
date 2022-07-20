@@ -1,5 +1,6 @@
 const NextRouter = require("next/router");
-const { getRouteRegex, getRouteMatcher } = require("next/dist/shared/lib/router/utils");
+const { getRouteRegex } = require("next/dist/shared/lib/router/utils/route-regex");
+const { getRouteMatcher } = require("next/dist/shared/lib/router/utils/route-matcher");
 let knownRoutes = [];
 if (typeof window !== "undefined") {
     try {
