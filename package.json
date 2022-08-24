@@ -1,6 +1,6 @@
 {
   "name": "next-known-route",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "description": "Check if a url is a known route to a next.js application ahead of time",
   "main": "index.js",
   "repository": "git@github.com:ScriptedAlchemy/next-known-route.git",
