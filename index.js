@@ -48,7 +48,9 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
         }
 
         let serverRoutes = [];
+        let configuredRoutes = []
         let pageManifest;
+        let routeManifest
         if (fs.existsSync(path.join(__dirname, "pages-manifest.json"))) {
             pageManifest = path.join(__dirname, "pages-manifest.json");
         } else if (fs.existsSync(path.join(__dirname, "../pages-manifest.json"))) {
@@ -56,6 +58,15 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
         } else if (fs.existsSync(path.join(process.cwd(), ".next/server", "pages-manifest.json"))) {
             pageManifest = path.join(process.cwd(), ".next/server", "pages-manifest.json");
         }
+
+        if (fs.existsSync(path.join(__dirname, "route-manifest.json"))) {
+          routeManifest = path.join(__dirname, "route-manifest.json");
+        } else if (fs.existsSync(path.join(__dirname, "../route-manifest.json"))) {
+          routeManifest = path.join(__dirname, "../route-manifest.json");
+        } else if (fs.existsSync(path.join(process.cwd(), ".next", "route-manifest.json"))) {
+          routeManifest = path.join(process.cwd(), ".next", "route-manifest.json");
+        }
+
         if(pageManifest) {
             try {
                 serverRoutes = Object.keys(requireFunc(pageManifest));
@@ -63,7 +74,17 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
                 console.error(e);
             }
         }
-        knownRoutes = Array.from(new Set([].concat(serverRoutes, additionalRoutes)));
+        if(routeManifest) {
+            try {
+                var configdRoutes = requireFunc(routeManifest);
+                configuredRoutes = [].concat(configdRoutes.dynamicRoutes, configdRoutes.staticRoutes, configdRoutes.rewrites).map(function (route) {
+                    return {regex: route.regex}
+                })
+            } catch(e) {
+                console.error(e)
+            }
+        }
+        knownRoutes = Array.from(new Set([].concat(serverRoutes, additionalRoutes, configuredRoutes)));
     }
 
     return knownRoutes;
@@ -75,8 +96,16 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
  */
 module.exports.isKnownRoute = function isKnownRoute(url) {
     return knownRoutes.some(function(routeExp) {
-        var routeRegex = getRouteRegex(routeExp);
-        var routeMatcher = getRouteMatcher(routeRegex);
-        return routeMatcher(url);
+        if(typeof routeExp === 'string') {
+            var routeRegex = getRouteRegex(routeExp);
+            var routeMatcher = getRouteMatcher(routeRegex);
+            return routeMatcher(url);
+        }
+
+        if(routeExp.regex) {
+            return new RegExp(routeExp.regex).test(url)
+        }
+
+        return false
     });
 };
