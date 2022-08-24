@@ -77,7 +77,7 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
         if(routeManifest) {
             try {
                 var configdRoutes = requireFunc(routeManifest);
-                configuredRoutes = [].concat(configdRoutes.dynamicRoutes, configdRoutes.staticRoutes, configdRoutes.rewrites).map(function (route) {
+                configuredRoutes = [].concat(configdRoutes.dynamicRoutes, configdRoutes.staticRoutes, configdRoutes.rewrites).filter(function(r){return r}).map(function (route) {
                     return {regex: route.regex}
                 })
             } catch(e) {
