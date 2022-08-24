@@ -59,12 +59,12 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
             pageManifest = path.join(process.cwd(), ".next/server", "pages-manifest.json");
         }
 
-        if (fs.existsSync(path.join(__dirname, "route-manifest.json"))) {
-          routeManifest = path.join(__dirname, "route-manifest.json");
-        } else if (fs.existsSync(path.join(__dirname, "../route-manifest.json"))) {
-          routeManifest = path.join(__dirname, "../route-manifest.json");
-        } else if (fs.existsSync(path.join(process.cwd(), ".next", "route-manifest.json"))) {
-          routeManifest = path.join(process.cwd(), ".next", "route-manifest.json");
+        if (fs.existsSync(path.join(__dirname, "routes-manifest.json"))) {
+          routeManifest = path.join(__dirname, "routes-manifest.json");
+        } else if (fs.existsSync(path.join(__dirname, "../routes-manifest.json"))) {
+          routeManifest = path.join(__dirname, "../routes-manifest.json");
+        } else if (fs.existsSync(path.join(process.cwd(), ".next", "routes-manifest.json"))) {
+          routeManifest = path.join(process.cwd(), ".next", "routes-manifest.json");
         }
 
         if(pageManifest) {
