@@ -28,9 +28,10 @@ if (typeof window !== "undefined") {
 /**
  *
  * @param additionalRoutes {array} - accepts an array of any additional routes
+ * @param dotNextDirPath {string} - (optional) the path where the .next folder lives
  * @returns {*[]}
  */
-module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = []) {
+module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [], dotNextDirPath = "/") {
     if (typeof window !== "undefined") {
         additionalRoutes.forEach(function(page) {
             if (!knownRoutes.includes(page)) {
@@ -57,6 +58,8 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
             pageManifest = path.join(__dirname, "../pages-manifest.json");
         } else if (fs.existsSync(path.join(process.cwd(), ".next/server", "pages-manifest.json"))) {
             pageManifest = path.join(process.cwd(), ".next/server", "pages-manifest.json");
+        } else if (fs.existsSync(path.join(dotNextDirPath, ".next/server", "pages-manifest.json"))) {
+            pageManifest = path.join(dotNextDirPath, ".next/server", "pages-manifest.json");
         }
 
         if (fs.existsSync(path.join(__dirname, "routes-manifest.json"))) {
@@ -65,6 +68,8 @@ module.exports.getRouteManifest = function getRouteManifest(additionalRoutes = [
           routeManifest = path.join(__dirname, "../routes-manifest.json");
         } else if (fs.existsSync(path.join(process.cwd(), ".next", "routes-manifest.json"))) {
           routeManifest = path.join(process.cwd(), ".next", "routes-manifest.json");
+        } else if (fs.existsSync(path.join(dotNextDirPath, ".next", "routes-manifest.json"))) {
+            routeManifest = path.join(dotNextDirPath, ".next", "routes-manifest.json");
         }
 
         if(pageManifest) {
