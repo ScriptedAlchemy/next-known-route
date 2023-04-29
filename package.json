@@ -3,11 +3,20 @@
   "version": "2.1.2",
   "description": "Check if a url is a known route to a next.js application ahead of time",
   "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:debug": "node --inspect=127.0.0.1:9229 ./node_modules/.bin/jest --watch"
+  },
   "repository": "git@github.com:ScriptedAlchemy/next-known-route.git",
   "author": "ScriptedAlchemy <zackary.l.jackson@gmail.com>",
   "license": "MIT",
   "private": false,
   "peerDependencies": {
     "next": "^12.2"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "next": "^12.2",
+    "react": "^18.2.0"
   }
 }
