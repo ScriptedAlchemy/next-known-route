@@ -20,9 +20,9 @@ const generateRegexRoutesManifest = (routesManifest) => {
  */
 const generateBaseRoutes = (routesManifest) => {
   const configuredRoutes = [
-    ...routesManifest.dynamicRoutes,
-    ...routesManifest.staticRoutes,
-    ...routesManifest.rewrites,
+    ...(routesManifest?.dynamicRoutes || []),
+    ...(routesManifest?.staticRoutes || []),
+    ...(routesManifest?.rewrites || []),
   ];
 
   return configuredRoutes.map(function (route) {
@@ -62,19 +62,20 @@ const buildI18nRegex = (regexString, locales) => {
 const generateI18nRoutes = (routesManifest) => {
   if (routesManifest?.i18n?.locales?.length > 0) {
     const configuredRoutes = [
-      ...routesManifest.dynamicRoutes,
-      ...routesManifest.staticRoutes,
+      ...(routesManifest?.dynamicRoutes || []),
+      ...(routesManifest?.staticRoutes || []),
     ];
     const locales = routesManifest.i18n.locales;
 
-    return (
-      configuredRoutes
-        .map((route) => {
-          return { regex: buildI18nRegex(route.regex, locales) };
-        }).concat(locales.map((locale) => {
+    return configuredRoutes
+      .map((route) => {
+        return { regex: buildI18nRegex(route.regex, locales) };
+      })
+      .concat(
+        locales.map((locale) => {
           return { regex: `^\/${locale}$` };
-        }))
-    );
+        })
+      );
   }
   return [];
 };
