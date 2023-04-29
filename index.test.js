@@ -1,4 +1,4 @@
-const { getRouteManifest, isKnownRoute } = require('../');
+const { getRouteManifest, isKnownRoute } = require('./');
 const nextDirPath = `${process.cwd()}/mocks`;
 
 describe('getRouteManifest', () => {
