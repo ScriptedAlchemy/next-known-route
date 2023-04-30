@@ -5,7 +5,9 @@ const {
 const {
   getRouteMatcher,
 } = require("next/dist/shared/lib/router/utils/route-matcher");
-const { generateRegexRoutesManifest } = require("./utils/generate-regex-routes-manifest");
+const {
+  generateRegexRoutesManifest,
+} = require("./utils/generate-regex-routes-manifest");
 
 let knownRoutes = [];
 if (typeof window !== "undefined") {
@@ -17,10 +19,17 @@ if (typeof window !== "undefined") {
   if (NextRouter.ready) {
     NextRouter.ready(function () {
       try {
-        NextRouter.router.pageLoader.getPageList().then(function (pageList) {
+        const { pageLoader, locales } = NextRouter.router;
+
+        pageLoader.getPageList().then(function (pageList) {
           pageList.forEach(function (page) {
             if (!knownRoutes.includes(page)) {
               knownRoutes.push(page);
+              if (Array.isArray(locales))
+                locales.forEach((locale) => {
+                  if (!page.startsWith("/.."))
+                    knownRoutes.push(`/${locale}${page}`);
+                });
             }
           });
         });
