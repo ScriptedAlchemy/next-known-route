@@ -1,6 +1,6 @@
 {
   "name": "next-known-route",
-  "version": "2.2.0-rc.1",
+  "version": "2.2.0",
   "description": "Check if a url is a known route to a next.js application ahead of time",
   "main": "index.js",
   "scripts": {
