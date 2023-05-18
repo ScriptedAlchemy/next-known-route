@@ -22,7 +22,15 @@ const generateBaseRoutes = (routesManifest) => {
   const configuredRoutes = [
     ...(routesManifest?.dynamicRoutes || []),
     ...(routesManifest?.staticRoutes || []),
-    ...(routesManifest?.rewrites || []),
+    ...(Array.isArray(routesManifest?.rewrites)
+      ? /* The rewrites property is an array when the parent caller's requireFunc uses Node.js' native require(). */
+        routesManifest?.rewrites
+      : /* The rewrites property is an object when the parent caller's requireFunc uses __non_webpack_require__(). */
+        [
+          ...(routesManifest?.rewrites?.beforeFiles || []),
+          ...(routesManifest?.rewrites?.afterFiles || []),
+          ...(routesManifest?.rewrites?.fallback || []),
+        ]),
   ];
 
   return configuredRoutes.map(function (route) {

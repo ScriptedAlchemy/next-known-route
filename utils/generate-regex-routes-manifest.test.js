@@ -2,36 +2,41 @@ const {
   generateRegexRoutesManifest,
 } = require("./generate-regex-routes-manifest");
 
-const routesManifest = {
-  rewrites: [
-    {
-      regex:
-        "^(?:/(en\\-us|en\\-ca|fr\\-ca))(?:/(help|aider))(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$",
-    },
-  ],
-  staticRoutes: [
-    { page: "home", regex: "^/$", routeKeys: {}, namedRegex: "" },
-    { page: "about", regex: "^/about$", routeKeys: {}, namedRegex: "" },
-  ],
-};
+let routesManifest;
+let routesManifestI18n;
 
-const routesManifestI18n = {
-  rewrites: [
-    {
-      regex:
-        "^(?:/(en\\-us|en\\-ca|fr\\-ca))(?:/(help|aider))(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$",
+beforeEach(() => {
+  routesManifest = {
+    rewrites: [
+      {
+        regex:
+          "^(?:/(en\\-us|en\\-ca|fr\\-ca))(?:/(help|aider))(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$",
+      },
+    ],
+    staticRoutes: [
+      { page: "home", regex: "^/$", routeKeys: {}, namedRegex: "" },
+      { page: "about", regex: "^/about$", routeKeys: {}, namedRegex: "" },
+    ],
+  };
+
+  routesManifestI18n = {
+    rewrites: [
+      {
+        regex:
+          "^(?:/(en\\-us|en\\-ca|fr\\-ca))(?:/(help|aider))(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$",
+      },
+    ],
+    staticRoutes: [
+      { page: "home", regex: "^/$", routeKeys: {}, namedRegex: "" },
+      { page: "about", regex: "^/about$", routeKeys: {}, namedRegex: "" },
+    ],
+    i18n: {
+      locales: ["en-US", "es-MX"],
+      defaultLocale: "en-US",
+      localeDetection: false,
     },
-  ],
-  staticRoutes: [
-    { page: "home", regex: "^/$", routeKeys: {}, namedRegex: "" },
-    { page: "about", regex: "^/about$", routeKeys: {}, namedRegex: "" },
-  ],
-  i18n: {
-    locales: ["en-US", "es-MX"],
-    defaultLocale: "en-US",
-    localeDetection: false,
-  },
-};
+  };
+});
 
 describe("generateRegexRoutesManifest", () => {
   test("returns an array of regex objects", () => {
@@ -70,11 +75,39 @@ describe("generateRegexRoutesManifest", () => {
     );
   });
 
-  test("should not fail if manifest is not present", () => {    
+  test("generates routes when routes-manifest.json has a rewrites object instead of an array", () => {
+    routesManifest.rewrites = {
+      beforeFiles: [],
+      afterFiles: [
+        {
+          source:
+            "/:nextInternalLocale(en\\-us|en\\-ca|fr\\-ca)/(help|aider)/:wildcard*",
+          destination: "/:nextInternalLocale/about/:wildcard*",
+          regex:
+            "^(?:/(en\\-us|en\\-ca|fr\\-ca))(?:/(mytest|mytest2))(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$",
+        },
+      ],
+      fallback: [],
+    };
+
+    const regexRoutes = generateRegexRoutesManifest(routesManifest);
+
+    expect(regexRoutes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({"regex": "^/$"}),
+        expect.objectContaining({"regex": "^/about$"}),
+        expect.objectContaining({
+          regex:
+            "^(?:/(en\\-us|en\\-ca|fr\\-ca))(?:/(mytest|mytest2))(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$",
+        }),
+      ])
+    );
+  });
+
+  test("should not fail if manifest is not present", () => {
     const isNull = generateRegexRoutesManifest(null);
     const isUndefined = generateRegexRoutesManifest(undefined);
     const isString = generateRegexRoutesManifest("i-am-a-string");
-
 
     expect(isNull).toStrictEqual([]);
     expect(isUndefined).toStrictEqual([]);
